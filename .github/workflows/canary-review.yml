@@ -1,0 +1,37 @@
+name: AL-Go Copilot review canary
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number to review
+        required: true
+        type: string
+      head_sha:
+        description: Exact pull request head SHA
+        required: true
+        type: string
+      base_ref:
+        description: Pull request base branch
+        required: true
+        default: main
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  copilot-requests: write
+
+jobs:
+  review:
+    uses: WaelAbuSeada/AL-Go/.github/workflows/CopilotPRReview.yml@prototype/bcquality-plugin-review
+    with:
+      pr_number: ${{ inputs.pr_number }}
+      head_sha: ${{ inputs.head_sha }}
+      base_ref: ${{ inputs.base_ref }}
+      target_repo: WaelAbuSeada/al-go-copilot-review-canary
+      engine_repo: WaelAbuSeada/AL-Go
+      engine_ref: prototype/bcquality-plugin-review
+      minimum_severity: Low
+      post_summary: "true"
