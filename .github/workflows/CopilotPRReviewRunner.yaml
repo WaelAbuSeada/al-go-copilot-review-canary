@@ -17,6 +17,7 @@ env:
   ALGoOrgSettings: ${{ vars.ALGoOrgSettings }}
   ALGoRepoSettings: ${{ vars.ALGoRepoSettings }}
   COPILOT_CLI_VERSION: 1.0.88
+  REVIEW_AGENT_VERSION: 10.0.7
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
@@ -50,7 +51,7 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
 
       - name: Read settings
-        uses: WaelAbuSeada/AL-Go/Actions/ReadSettings@c447bbc259c3748520ae96b6ef6171447e4cefb5
+        uses: WaelAbuSeada/AL-Go/Actions/ReadSettings@5e1f03e3688e57a78645f9ccb28f817b66db570b
         with:
           shell: pwsh
           project: ''
@@ -59,7 +60,7 @@ jobs:
 
       - name: Resolve review context
         id: context
-        uses: WaelAbuSeada/AL-Go/Actions/ReviewAgent@c447bbc259c3748520ae96b6ef6171447e4cefb5
+        uses: WaelAbuSeada/AL-Go/Actions/ReviewAgent@5e1f03e3688e57a78645f9ccb28f817b66db570b
         with:
           shell: pwsh
           phase: context
@@ -93,7 +94,7 @@ jobs:
           node-version: 24
 
       - name: Setup Copilot CLI
-        uses: WaelAbuSeada/AL-Go/Actions/ReviewAgent@c447bbc259c3748520ae96b6ef6171447e4cefb5
+        uses: WaelAbuSeada/AL-Go/Actions/ReviewAgent@5e1f03e3688e57a78645f9ccb28f817b66db570b
         with:
           shell: pwsh
           phase: prepare
@@ -101,14 +102,14 @@ jobs:
 
       - name: Setup BCQuality
         id: setup
-        uses: WaelAbuSeada/AL-Go/Actions/SetupBCQuality@c447bbc259c3748520ae96b6ef6171447e4cefb5
+        uses: WaelAbuSeada/AL-Go/Actions/SetupBCQuality@5e1f03e3688e57a78645f9ccb28f817b66db570b
         with:
           shell: pwsh
           bcqualitySettingsJson: ${{ needs.prepare.outputs.bcqualitySettingsJson }}
           token: ${{ secrets.BCQUALITY_TOKEN }}
 
       - name: Run Copilot PR review
-        uses: WaelAbuSeada/AL-Go/Actions/ReviewAgent@c447bbc259c3748520ae96b6ef6171447e4cefb5
+        uses: WaelAbuSeada/AL-Go/Actions/ReviewAgent@5e1f03e3688e57a78645f9ccb28f817b66db570b
         with:
           shell: pwsh
           phase: generate
@@ -124,6 +125,7 @@ jobs:
           bcqualityRoot: ${{ steps.setup.outputs.pluginRoot }}
           bcqualitySettingsJson: ${{ needs.prepare.outputs.bcqualitySettingsJson }}
           copilotCliVersion: ${{ env.COPILOT_CLI_VERSION }}
+          agentVersion: ${{ env.REVIEW_AGENT_VERSION }}
 
       - name: Upload review output
         if: always()
@@ -167,7 +169,7 @@ jobs:
           path: ${{ github.workspace }}/review-output
 
       - name: Publish Copilot PR review
-        uses: WaelAbuSeada/AL-Go/Actions/ReviewAgent@c447bbc259c3748520ae96b6ef6171447e4cefb5
+        uses: WaelAbuSeada/AL-Go/Actions/ReviewAgent@5e1f03e3688e57a78645f9ccb28f817b66db570b
         with:
           shell: pwsh
           phase: post
@@ -179,6 +181,7 @@ jobs:
           reviewWorkspace: ${{ github.workspace }}/trusted
           reviewOutputDir: ${{ github.workspace }}/review-output
           bcqualitySettingsJson: ${{ needs.prepare.outputs.bcqualitySettingsJson }}
+          agentVersion: ${{ env.REVIEW_AGENT_VERSION }}
 
       - name: Upload published review artifacts
         if: always()
