@@ -51,7 +51,7 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
 
       - name: Read settings
-        uses: WaelAbuSeada/AL-Go/Actions/ReadSettings@5e1f03e3688e57a78645f9ccb28f817b66db570b
+        uses: WaelAbuSeada/AL-Go/Actions/ReadSettings@bb5f67a58c23c1fb283adfb9e321d1bc8ee4e1c4
         with:
           shell: pwsh
           project: ''
@@ -60,7 +60,7 @@ jobs:
 
       - name: Resolve review context
         id: context
-        uses: WaelAbuSeada/AL-Go/Actions/ReviewAgent@5e1f03e3688e57a78645f9ccb28f817b66db570b
+        uses: WaelAbuSeada/AL-Go/Actions/ReviewAgent@bb5f67a58c23c1fb283adfb9e321d1bc8ee4e1c4
         with:
           shell: pwsh
           phase: context
@@ -94,7 +94,7 @@ jobs:
           node-version: 24
 
       - name: Setup Copilot CLI
-        uses: WaelAbuSeada/AL-Go/Actions/ReviewAgent@5e1f03e3688e57a78645f9ccb28f817b66db570b
+        uses: WaelAbuSeada/AL-Go/Actions/ReviewAgent@bb5f67a58c23c1fb283adfb9e321d1bc8ee4e1c4
         with:
           shell: pwsh
           phase: prepare
@@ -102,14 +102,14 @@ jobs:
 
       - name: Setup BCQuality
         id: setup
-        uses: WaelAbuSeada/AL-Go/Actions/SetupBCQuality@5e1f03e3688e57a78645f9ccb28f817b66db570b
+        uses: WaelAbuSeada/AL-Go/Actions/SetupBCQuality@bb5f67a58c23c1fb283adfb9e321d1bc8ee4e1c4
         with:
           shell: pwsh
           bcqualitySettingsJson: ${{ needs.prepare.outputs.bcqualitySettingsJson }}
           token: ${{ secrets.BCQUALITY_TOKEN }}
 
       - name: Run Copilot PR review
-        uses: WaelAbuSeada/AL-Go/Actions/ReviewAgent@5e1f03e3688e57a78645f9ccb28f817b66db570b
+        uses: WaelAbuSeada/AL-Go/Actions/ReviewAgent@bb5f67a58c23c1fb283adfb9e321d1bc8ee4e1c4
         with:
           shell: pwsh
           phase: generate
@@ -169,7 +169,7 @@ jobs:
           path: ${{ github.workspace }}/review-output
 
       - name: Publish Copilot PR review
-        uses: WaelAbuSeada/AL-Go/Actions/ReviewAgent@5e1f03e3688e57a78645f9ccb28f817b66db570b
+        uses: WaelAbuSeada/AL-Go/Actions/ReviewAgent@bb5f67a58c23c1fb283adfb9e321d1bc8ee4e1c4
         with:
           shell: pwsh
           phase: post
